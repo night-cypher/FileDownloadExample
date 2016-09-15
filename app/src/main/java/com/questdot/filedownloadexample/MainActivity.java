@@ -27,7 +27,8 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity  implements View.OnClickListener {
 
-
+    long id;
+    long idPro;
     private ProgressBar progressBar;
     private ListView mlistView;
     private SimpleAdapter adapter;
@@ -73,11 +74,10 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         IntentFilter filter = new IntentFilter();
         filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
         filter.addAction(DownloadManager.ACTION_NOTIFICATION_CLICKED);
-        receiver = new DownLoadCompleteReceiver();
+        receiver = new DownLoadCompleteReceiver(this);
         registerReceiver(receiver, filter);
     }
-    long id;
-    long idPro;
+
     @Override
     public void onClick(View v) {
         DownloadManager.Request request =
@@ -164,17 +164,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
 
     }
 
-    private class DownLoadCompleteReceiver extends BroadcastReceiver{
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)){
-                long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-                Toast.makeText(MainActivity.this, "Completed", Toast.LENGTH_SHORT).show();
-            }else if(intent.getAction().equals(DownloadManager.ACTION_NOTIFICATION_CLICKED)){
-                Toast.makeText(MainActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
+
 
     @Override
     protected void onDestroy() {
